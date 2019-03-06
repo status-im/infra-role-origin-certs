@@ -1,0 +1,6 @@
+---
+# The default is for linux
+admin_group: adm
+
+cloudflare_origin_crt: ~
+cloudflare_origin_key: ~

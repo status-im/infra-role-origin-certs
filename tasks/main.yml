@@ -1,0 +1,26 @@
+---
+- name: 'Change admin group if on MacOS'
+  set_fact:
+    admin_group: admin
+  when: ansible_os_family == "Darwin"
+
+- name: 'Create certs directory'
+  file:
+    path: /certs
+    state: directory
+    mode: 0755
+    group: '{{ admin_group }}'
+
+- name: 'Copy over CloudFlare origin certificate'
+  copy:
+    content: '{{ cloudflare_origin_crt | mandatory }}'
+    dest: /certs/origin.crt
+    mode: 0644
+    group: '{{ admin_group }}'
+
+- name: 'Copy over CloudFlare origin key'
+  copy:
+    content: '{{ cloudflare_origin_key | mandatory }}'
+    dest: /certs/origin.key
+    mode: 0644
+    group: '{{ admin_group }}'
