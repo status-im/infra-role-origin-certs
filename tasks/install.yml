@@ -1,0 +1,34 @@
+---
+- name: 'Origin Certs | Create directory for: {{ cert.domain }}'
+  file:
+    path: '/certs/{{ cert.domain }}'
+    state: directory
+    mode: 0755
+    group: '{{ admin_group }}'
+
+- name: 'Origin Certs | Copy CloudFlare certificate'
+  copy:
+    content: '{{ cert.crt | mandatory }}'
+    dest: '/certs/{{ cert.domain }}/origin.crt'
+    group: '{{ admin_group }}'
+    mode: 0644
+
+- name: 'Origin Certs | Copy over CloudFlare key'
+  copy:
+    content: '{{ cert.key | mandatory }}'
+    dest: '/certs/{{ cert.domain }}/origin.key'
+    group: '{{ admin_group }}'
+    mode: 0644
+
+# this is a workaround, status.im used to be the only certificate
+- name: 'Origin Certs | Symlink the default certificate'
+  file:
+    src: '{{ item.src }}'
+    path: '{{ item.dst }}'
+    state: link
+    mode: 0644
+    group: '{{ admin_group }}'
+  with_items:
+    - { src: '/certs/{{ cert.domain }}/origin.crt', dst: '/certs/origin.crt' }
+    - { src: '/certs/{{ cert.domain }}/origin.key', dst: '/certs/origin.key' }
+  when: cert.get("default", false)

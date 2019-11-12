@@ -6,11 +6,32 @@ This role installs the certificate and key pair from CloudFlare which is called 
 
 Details: https://blog.cloudflare.com/cloudflare-ca-encryption-origin/
 
+# Configuration
+
+```yaml
+origin_certs:
+  - domain: 'status.im'
+    crt: '-----BEGIN CERTIFICATE-----\nABC...'
+    key: '-----BEGIN PRIVATE KEY-----\n321...'
+    default: true
+
+  - domain: 'example.org'
+    crt: '-----BEGIN CERTIFICATE-----\nXYZ...'
+    key: '-----BEGIN PRIVATE KEY-----\n123...'
+```
+
 # Usage
 
-The certificates end up in the same place as other certs:
+The certificates end up under `/certs/${domain}` like so:
 
-* `/certs/origin.crt`
-* `/certs/origin.key`
+```
+/certs/status.im/origin.crt
+/certs/status.im/origin.key
+/certs/example.org/origin.crt
+/certs/example.org/origin.key
+/certs/origin.crt -> /certs/status.im/origin.crt
+/certs/origin.key -> /certs/status.im/origin.key
+```
+With the default cert being symlinked under `/certs/origin.{crt,key}` as a workarounf for old setup.
 
-And are used by services like Nginx or Grafana for the purpose of verifying their identity for CloudFlare proxy servers.
+These certificates are used by services like Nginx or Grafana for the purpose of verifying their identity for CloudFlare proxy servers.
