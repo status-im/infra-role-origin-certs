@@ -4,21 +4,21 @@
     path: '/certs/{{ cert.domain }}'
     state: directory
     mode: 0755
-    group: '{{ admin_group }}'
+    group: '{{ origin_certs_group }}'
 
 - name: 'Origin Certs | Copy CloudFlare certificate'
   copy:
     content: '{{ cert.crt | mandatory }}'
     dest: '/certs/{{ cert.domain }}/origin.crt'
-    group: '{{ admin_group }}'
+    group: '{{ origin_certs_group }}'
     mode: 0644
 
 - name: 'Origin Certs | Copy over CloudFlare key'
   copy:
     content: '{{ cert.key | mandatory }}'
     dest: '/certs/{{ cert.domain }}/origin.key'
-    group: '{{ admin_group }}'
-    mode: 0644
+    group: '{{ origin_certs_group }}'
+    mode: 0640
 
 # this is a workaround, status.im used to be the only certificate
 - name: 'Origin Certs | Symlink the default certificate'
@@ -27,7 +27,7 @@
     path: '{{ item.dst }}'
     state: link
     mode: 0644
-    group: '{{ admin_group }}'
+    group: '{{ origin_certs_group }}'
   with_items:
     - { src: '/certs/{{ cert.domain }}/origin.crt', dst: '/certs/origin.crt' }
     - { src: '/certs/{{ cert.domain }}/origin.key', dst: '/certs/origin.key' }

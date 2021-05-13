@@ -1,5 +1,5 @@
 ---
 # The default is for linux
-admin_group: adm
+origin_certs_group: 'adm'
 
 origin_certs: []

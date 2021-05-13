@@ -9,7 +9,7 @@
     path: /certs
     state: directory
     mode: 0755
-    group: '{{ admin_group }}'
+    group: '{{ origin_certs_group }}'
 
 - name: 'Origin Certs | Install certs for each domain'
   include_tasks: install.yml
