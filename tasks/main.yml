@@ -16,3 +16,4 @@
   with_items: '{{ origin_certs }}'
   loop_control:
     loop_var: cert
+    label: '{{ cert.domain }}'
