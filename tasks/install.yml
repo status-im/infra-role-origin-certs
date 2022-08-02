@@ -20,6 +20,23 @@
     group: '{{ origin_certs_group }}'
     mode: 0640
 
+# Useful for ssl-proxy config which can use those too.
+- name: 'Origin Certs | Symlink cert as bundle.crt'
+  file:
+    src: 'origin.crt'
+    path: '/certs/{{ cert.domain }}/bundle.crt'
+    state: link
+    mode: 0644
+    group: '{{ origin_certs_group }}'
+
+- name: 'Origin Certs | Symlink key as cert.key'
+  file:
+    src: 'origin.key'
+    path: '/certs/{{ cert.domain }}/cert.key'
+    state: link
+    mode: 0640
+    group: '{{ origin_certs_group }}'
+
 # this is a workaround, status.im used to be the only certificate
 - name: 'Origin Certs | Symlink the default certificate'
   file:
